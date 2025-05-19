@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:52:10 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/05/07 20:41:50 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/05/19 22:13:17 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@ typedef struct	s_data {
 	int		endian;
 }				t_data;
 
+static void my_mlx_put_pixel(t_data *img, int x, int y, double color)
+{
+	int		offset;
+
+	offset = (y * img->line_length) + (x * (img->bits_per_pixel / 8));
+	*(unsigned int *)(img->addr + offset) = color;
+}
 int	main(void)
 {
 	void	*mlx;
@@ -31,7 +38,7 @@ int	main(void)
 	img.img = mlx_new_image(mlx, 1920, 1080);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								&img.endian);
-	mlx_pixel_put(&mlx, &mlx_win, 5, 5, 0x00FF0000);
+	my_mlx_put_pixel(&img, 5, 5, 0x00FF0000);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 }
