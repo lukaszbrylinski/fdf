@@ -1,51 +1,50 @@
-CC = cc
+# Project name
+NAME := fdf
 
-# Compiler flags
-CFLAGS = -Wall -Wextra -Werror
+# Compiler and flags
+CC := cc
+CFLAGS := -Wall -Wextra -Werror
 
-# Executable Name
-NAME = fdf
+# Directories
+MLX_DIR := ../minilibx-linux
+INCLUDES := -I$(MLX_DIR)
 
-# Source Files
-SRCS = line_drawing.c ft_split.c gnl_utils.c gnl.c main.c parse_data_utils.c parse_data.c printf_utils.c printf.c utils.c
+# Libraries
+MLX_LIB := $(MLX_DIR)/libmlx_Linux.a
+LIBS := -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
 
-# Object Files
-OBJS = $(SRCS:.c=.o)
+# Source and object files
+SRC := main.c \
+       gnl.c \
+       gnl_utils.c \
+       parse_data.c \
+       parse_data_utils.c \
+       line_drawing.c \
+       utils.c \
+       ft_split.c \
+       printf.c \
+       printf_utils.c
 
-# Headers
-HEADERS = fdf.h
+OBJ := $(SRC:.c=.o)
 
-# MiniLibX (Linux)
-MLX_DIR = ./minilibx-linux
-MLX_LIB = $(MLX_DIR)/libmlx_Linux.a -lX11 -lXext -lm
-MLX_INC = -I$(MLX_DIR)
+all: $(NAME)
 
-# Default target
-all: $(MLX_DIR)/libmlx_Linux.a $(NAME)
+$(NAME): $(MLX_LIB) $(OBJ)
+	$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJ) $(MLX_LIB) $(LIBS)
 
-# Build the executable
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(MLX_LIB) $(MLX_INC)
+$(MLX_LIB):
+	@echo "Building MiniLibX..."
+	@$(MAKE) -C $(MLX_DIR)
 
-# Compile source files into object files
-%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) $(MLX_INC) -c $< -o $@
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-# Build MiniLibX
-$(MLX_DIR)/libmlx_Linux.a:
-	make -C $(MLX_DIR)
-
-# Clean object files
 clean:
-	rm -f $(OBJS)
-	@make -C $(MLX_DIR) clean || true
+	@rm -f $(OBJ)
 
-# Clean everything
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
-# Rebuild all
 re: fclean all
 
-# Phony targets
 .PHONY: all clean fclean re
