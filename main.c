@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:52:10 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/06/12 19:05:37 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/06/12 21:20:15 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,54 @@ void my_mlx_put_pixel(t_data *img, int x, int y, double color)
 // 	free(buf);
 // 	return (stash);
 // }
+
+int	**parse_file_to_int_array(const char *filename, int *rows_out, int *cols_out)
+{
+	int		fd = open(filename, O_RDONLY);
+	char	*line;
+	int		**grid = NULL;
+	int		rows = 0;
+	int		cols = -1;
+
+	if (fd < 0)
+		return (NULL);
+
+	// We'll allocate space for a max of 100 lines (you can make it dynamic later)
+	grid = malloc(sizeof(int *) * 100);
+	if (!grid)
+		return (NULL);
+
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		char	**tokens = ft_split(line, ' ');
+		int		col_count = 0;
+
+		// Count tokens to determine columns on first row
+		while (tokens[col_count])
+			col_count++;
+
+		if (cols == -1)
+			cols = col_count;
+
+		grid[rows] = malloc(sizeof(int) * col_count);
+		for (int i = 0; i < col_count; i++)
+			grid[rows][i] = ft_atoi(tokens[i]);
+
+		// Free tokens
+		for (int i = 0; i < col_count; i++)
+			free(tokens[i]);
+		free(tokens);
+		free(line);
+		rows++;
+	}
+
+	close(fd);
+	if (rows_out)
+		*rows_out = rows;
+	if (cols_out)
+		*cols_out = cols;
+	return grid;
+}
 
 char	**read_file_into_array(const char *filename)
 {

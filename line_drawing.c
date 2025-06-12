@@ -6,22 +6,31 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 20:49:44 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/06/04 21:53:04 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:15:47 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void bresenham(int x1, int y1, int x2, int y2)
+void bresenham(int x1, int y1, int x2, int y2, t_data *img)
 {
 	int	m_new;
 	int	slope_error_new;
+	int	x;
+	int	y;
 
+	y = y1;
+	x = x1;
 	m_new = 2 * (y2 - y1);
 	slope_error_new = m_new - (x2 - x1);
-	while (x1 < x2)
+	while (x <= x2)
 	{
-		
+		my_mlx_put_pixel(&img, x, y, 0x00FF0000);
 		slope_error_new += m_new;
+		if (slope_error_new >= 0)
+		{
+			y++;
+			slope_error_new -= 2* (x2 - x1);
+		}
 	}
 }
