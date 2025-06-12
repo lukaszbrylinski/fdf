@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:47:11 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/06/04 20:44:24 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:05:26 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int			ft_atoi(const char *str);
 int			count_columns(char *line);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*ft_strdup(char *src);
-//static void my_mlx_put_pixel(t_data *img, int x, int y, double color);
+void my_mlx_put_pixel(t_data *img, int x, int y, double color);
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5
