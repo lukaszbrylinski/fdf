@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 21:21:32 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/06/12 21:25:44 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:12:39 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	free_string_array(char **arr)
 {
 	int	i;
 
-	i =	0;
+	i = 0;
 	while (arr && arr[i])
 		free(arr[i++]);
 	free(arr);
@@ -36,9 +36,11 @@ char	**read_lines_from_file(const char *filename, int *row_count)
 	lines = malloc(sizeof(char *) * 100);
 	if (!lines)
 		return (NULL);
-	while ((line = get_next_line(fd)) && i < 100)
+	line = get_next_line(fd);
+	while (line && i < 100)
 	{
 		lines[i++] = line;
+		line = get_next_line(fd);
 	}
 	lines[i] = NULL;
 	close(fd);

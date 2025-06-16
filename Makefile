@@ -17,8 +17,8 @@ LIBS := -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
 SRC := main.c \
        gnl.c \
        gnl_utils.c \
-       parse_data.c \
-       parse_data_utils.c \
+       parse_to_int.c \
+       parse_to_int_utils.c \
        line_drawing.c \
        utils.c \
        ft_split.c \

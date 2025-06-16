@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:47:11 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/06/12 19:05:26 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/06/16 20:35:01 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,17 @@ int			**read_fdf_to_matrix(const char *filename, int *rows_out, int *cols_out, i
 int			resize_matrix(int ***matrix, int *capacity);
 int			handle_first_line(int fd, int **matrix, int *columns);
 int			**allocate_matrix(int capacity);
-int			*parse_line_to_ints(char *line, int columns);
 int			ft_atoi(const char *str);
 int			count_columns(char *line);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*ft_strdup(char *src);
 void my_mlx_put_pixel(t_data *img, int x, int y, double color);
+int	*parse_line_to_ints(char *line, int *width);
+int	**parse_lines_to_int_array(char **lines, int row_count, int *cols);
+int	**parse_file_to_int_array(const char *filename, int *rows, int *cols);
+char	**read_lines_from_file(const char *filename, int *row_count);
+void	free_string_array(char **arr);
+int	get_dimensions_from_file(const char *filename, int *rows, int *cols);
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5
