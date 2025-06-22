@@ -16,7 +16,13 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <math.h>
 # include "../minilibx-linux/mlx_int.h"
+
+#define TILE_SIZE 20
+#define Z_SCALE   3
+#define OFFSET_X  400
+#define OFFSET_Y  200
 
 typedef struct	s_data {
 	void	*img;
@@ -25,6 +31,34 @@ typedef struct	s_data {
 	int		line_length;
 	int		endian;
 }				t_data;
+
+typedef struct	s_map {
+	int	map_width;
+	int	map_height;
+	int	**map;
+	int	**color_map;
+}				t_map;
+
+typedef struct s_point {
+	int	x;
+	int	y;
+};				t_point;
+
+typedef struct s_line_params {
+	int		dx;
+	int		dy;
+	int		sx;
+	int		sy;
+	int		err;
+	int		steps;
+	int		i;
+}				t_line_params;
+
+typedef struct s_line_vars {
+	int				e2;
+	unsigned int	color;
+	float			t;
+}				t_line_vars;
 
 size_t		ft_strlen(const char *str);
 char		*ft_strchr(const char *str, int c);
@@ -63,6 +97,18 @@ int	**parse_file_to_int_array(const char *filename, int *rows, int *cols);
 char	**read_lines_from_file(const char *filename, int *row_count);
 void	free_string_array(char **arr);
 int	get_dimensions_from_file(const char *filename, int *rows, int *cols);
+
+//Parsing
+int	**alloc_2d_array(int rows, int cols);
+void	fill_color_row(int *color_row, int *map_row, int width);
+void	fill_maps(t_map *map_data, char **lines);
+char	**read_lines(int fd, int *out_count, int cap);
+t_map	*parse_map(int fd);
+void	fill_row(int *row, char *line, int width);
+void	free_arr(char **arr);
+int	count_columns(char *line);
+char	**resize_lines(char **old, int old_cap, int new_cap);
+
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5
