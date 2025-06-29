@@ -23,7 +23,9 @@ SRC := main.c \
        utils.c \
        ft_split.c \
        printf.c \
-       printf_utils.c
+       printf_utils.c \
+       new_parsing.c \
+       new_parsing_utils.c
 
 OBJ := $(SRC:.c=.o)
 
