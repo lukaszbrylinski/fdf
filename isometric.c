@@ -3,32 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   isometric.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:01:52 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/22 23:01:52 by marvin           ###   ########.fr       */
+/*   Updated: 2025/07/01 21:36:54 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_point	project_iso(int x, int y, int z)
+t_point project_iso(t_iso_ctx ctx)
 {
-	t_point	p;
+    t_point pt;
 
-	p.x = (x - y) * cos(0.523599) * TILE_SIZE + OFFSET_X;
-	p.y = (x + y) * sin(0.523599) * TILE_SIZE - z * Z_SCALE + OFFSET_Y;
-	return (p);
+    pt.x = (ctx.x - ctx.y) * cos(ISO_ANGLE) * ZOOM + OFFSET_X;
+    pt.y = (ctx.x + ctx.y) * sin(ISO_ANGLE) * ZOOM - ctx.z * 10 + OFFSET_Y;
+
+    return pt;
 }
 
-void	draw_line_colored(t_point *a, t_point *b, t_data *img, unsigned int color_a, unsigned int color_b)
+void	draw_line_colored(t_line_ctx ctx)
 {
 	t_line_params	p;
 	t_point			cur;
+	t_draw_ctx		draw_ctx;
 
-	init_line_params(a, b, &p);
-	cur = *a;
-	draw_line_step(&cur, b, &p, img, color_a, color_b);
+	init_line_params(&ctx.a, &ctx.b, &p);
+	cur = ctx.a;
+	draw_ctx = (t_draw_ctx){
+		.end = &ctx.b,
+		.params = &p,
+		.img = ctx.img,
+		.color_a = ctx.color_a,
+		.color_b = ctx.color_b
+	};
+	draw_line_step(&cur, draw_ctx);
 }
 
 void	init_line_params(t_point *a, t_point *b, t_line_params *p)
@@ -49,33 +58,32 @@ void	init_line_params(t_point *a, t_point *b, t_line_params *p)
 		p->steps = p->dy;
 	p->i = 0;
 }
-void	draw_line_step(t_point *cur, t_point *b, t_line_params *p,
-						t_data *img, unsigned int color_a, unsigned int color_b)
+void	draw_line_step(t_point *cur, t_draw_ctx ctx)
 {
 	t_line_vars	v;
 
-	while (p->i <= p->steps)
+	while (ctx.params->i <= ctx.params->steps)
 	{
-		if (p->steps == 0)
+		if (ctx.params->steps == 0)
 			v.t = 0.0f;
 		else
-			v.t = (float)p->i / (float)p->steps;
-		v.color = interpolate_color(color_a, color_b, v.t);
-		my_mlx_pixel_put(img, cur->x, cur->y, v.color);
-		if (cur->x == b->x && cur->y == b->y)
+			v.t = (float)ctx.params->i / (float)ctx.params->steps;
+		v.color = interpolate_color(ctx.color_a, ctx.color_b, v.t);
+		my_mlx_put_pixel(ctx.img, cur->x, cur->y, v.color);
+		if (cur->x == ctx.end->x && cur->y == ctx.end->y)
 			break;
-		v.e2 = 2 * p->err;
-		if (v.e2 > -p->dy)
+		v.e2 = 2 * ctx.params->err;
+		if (v.e2 > -ctx.params->dy)
 		{
-			p->err -= p->dy;
-			cur->x += p->sx;
+			ctx.params->err -= ctx.params->dy;
+			cur->x += ctx.params->sx;
 		}
-		if (v.e2 < p->dx)
-        {
-			p->err += p->dx;
-			cur->y += p->sy;
+		if (v.e2 < ctx.params->dx)
+		{
+			ctx.params->err += ctx.params->dx;
+			cur->y += ctx.params->sy;
 		}
-		p->i++;
+		ctx.params->i++;
 	}
 }
 

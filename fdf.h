@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:47:11 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/06/16 20:35:01 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/01 22:28:13 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,36 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <math.h>
-# include "../minilibx-linux/mlx_int.h"
+# include <X11/X.h>
+# include <X11/keysym.h>
+# include "../minilibx-linux/mlx.h"
 
-#define TILE_SIZE 20
+
 #define Z_SCALE   3
-#define OFFSET_X  400
-#define OFFSET_Y  200
+#define WIN_WIDTH 800
+#define WIN_HEIGHT 600
+#define ISO_ANGLE 0.523599
+#define ZOOM 20
+#define OFFSET_X (WIN_WIDTH / 2)
+#define OFFSET_Y (WIN_HEIGHT / 4)
+#define WIN_TITLE "FDF"
+// typedef struct	s_data {
+// 	void	*img;
+// 	char	*addr;
+// 	int		bits_per_pixel;
+// 	int		line_length;
+// 	int		endian;
+// }				t_data;
 
-typedef struct	s_data {
+typedef struct s_data {
+	void	*mlx;
+	void	*win;
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}				t_data;
+}	t_data;
 
 typedef struct	s_map {
 	int	map_width;
@@ -42,7 +58,7 @@ typedef struct	s_map {
 typedef struct s_point {
 	int	x;
 	int	y;
-};				t_point;
+}				t_point;
 
 typedef struct s_line_params {
 	int		dx;
@@ -59,6 +75,30 @@ typedef struct s_line_vars {
 	unsigned int	color;
 	float			t;
 }				t_line_vars;
+
+typedef struct s_line_ctx {
+	t_point			a;
+	t_point			b;
+	unsigned int	color_a;
+	unsigned int	color_b;
+	t_data			*img;
+}				t_line_ctx;
+
+typedef struct s_iso_ctx {
+	int	x;
+	int	y;
+	int	z;
+}				t_iso_ctx;
+
+typedef struct s_draw_ctx {
+	t_point			*end;
+	t_line_params	*params;
+	t_data			*img;
+	unsigned int	color_a;
+	unsigned int	color_b;
+}				t_draw_ctx;
+
+
 
 size_t		ft_strlen(const char *str);
 char		*ft_strchr(const char *str, int c);
@@ -109,6 +149,39 @@ void	free_arr(char **arr);
 int	count_columns(char *line);
 char	**resize_lines(char **old, int old_cap, int new_cap);
 
+//line drawing
+void draw_line(t_point *a, t_point *b, t_data *img);
+int	ft_abs(int val);
+void slope_less_then_one(int dx, int dy, t_point *a, t_data *img);
+void slope_bigger_than_one(int dx, int dy, t_point *a, t_data *img);
+
+// window
+int	handle_close(t_data *data);
+int	handle_keypress(int keycode, t_data *data);
+int	exit_clean(t_data *data);
+void	init_window(t_data *data);
+void setup_mlx_hooks(t_data *data);
+
+//utils
+void cleanup_and_exit(t_data *data, t_map *map, int exit_code);
+void free_map(t_map *map);
+int	ft_atoi(const char *str);
+char	*ft_strdup(char *src);
+void cleanup_and_exit(t_data *data, t_map *map, int exit_code);
+
+//isometric
+t_point	project_iso(t_iso_ctx c);
+void	draw_line_colored(t_line_ctx ctx);
+void	init_line_params(t_point *a, t_point *b, t_line_params *p);
+void	draw_line_step(t_point *cur, t_draw_ctx ctx);
+unsigned int	interpolate_color(unsigned int color_a, unsigned int color_b, float t);
+
+//render map
+t_map *open_and_parse_map(const char *filename);
+void render_map(t_data *data, t_map *map);
+void draw_line_neighbors(t_data *data, t_map *map, int x, int y);
+void draw_down_line(t_data *data, t_map *map, int x, int y);
+void draw_right_line(t_data *data, t_map *map, int x, int y);
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5

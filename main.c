@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:52:10 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/06/16 20:40:01 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/01 22:31:27 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,51 @@ void my_mlx_put_pixel(t_data *img, int x, int y, double color)
 	*(unsigned int *)(img->addr + offset) = color;
 }
 
+// static void	clean_and_write_msg(t_map *map, char *msg)
+// {
+// 		if (msg)
+// 		ft_printf("%s\n", msg);
+// 	if (map)
+// 	{
+// 		free_map(map);
+// 		free(map);
+// 	}
+// 	exit(1);
+// }
 int main(int argc, char **argv)
 {
-	void	*mlx;
-	void	*mlx_win;
-	void	*img;
-	int *rows, *cols;
-	int		**input_array;
+    t_data data;
+    t_map *map_data;
+    int fd;
 
-	mlx = NULL;
-	rows = NULL;
-	cols = NULL;
-	if (argc == 2)
-	{
-		if (get_dimensions_from_file(argv[1], rows, cols))
-		{
-			input_array = parse_file_to_int_array(argv[1], rows, cols);
-			mlx = mlx_init();
-			mlx_win = mlx_new_window(mlx, 1920, 1080, "FDF");
-		}
-		img = mlx_new_image(mlx, 1920, 1080);
-		mlx_loop(mlx);
-	}
-	return (0);
+    if (argc != 2)
+    {
+        ft_printf("Usage: %s <map_file>\n", argv[0]);
+        return (1);
+    }
+
+    fd = open(argv[1], O_RDONLY);
+    if (fd < 0)
+    {
+        perror("Error opening file");
+        return (1);
+    }
+
+    map_data = parse_map(fd);
+    close(fd);
+    if (!map_data)
+    {
+        ft_printf("Failed to parse map\n");
+        return (1);
+    }
+    init_window(&data);
+    render_map(&data, map_data);
+    mlx_hook(data.win, 2, 1L << 0, handle_keypress, &data);
+    mlx_hook(data.win, 17, 1L << 17, exit_clean, &data);
+    mlx_loop(data.mlx);
+	free_map(map_data);
+    return (0);
 }
+
+
+

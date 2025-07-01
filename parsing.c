@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 14:17:32 by marvin            #+#    #+#             */
-/*   Updated: 2025/06/29 14:17:32 by marvin           ###   ########.fr       */
+/*   Updated: 2025/07/01 19:50:24 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	fill_maps(t_map *map_data, char **lines)
 	i = 0;
 	while (lines[i])
 	{
-		fill_row(map_data->map[i], lines[i], map_data->width);
-		fill_color_row(map_data->color_map[i], map_data->map[i], map_data->width);
+		fill_row(map_data->map[i], lines[i], map_data->map_width);
+		fill_color_row(map_data->color_map[i], map_data->map[i], map_data->map_width);
 		i++;
 	}
 }
@@ -100,8 +100,8 @@ t_map	*parse_map(int fd)
 		return (NULL);
 	width = count_columns(lines[0]);
 	map_data = malloc(sizeof(t_map));
-	map_data->height = height;
-	map_data->width = width;
+	map_data->map_height = height;
+	map_data->map_width = width;
 	map_data->map = alloc_2d_array(height, width);
 	map_data->color_map = alloc_2d_array(height, width);
 	fill_maps(map_data, lines);

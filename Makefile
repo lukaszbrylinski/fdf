@@ -17,15 +17,16 @@ LIBS := -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
 SRC := main.c \
        gnl.c \
        gnl_utils.c \
-       parse_to_int.c \
-       parse_to_int_utils.c \
        line_drawing.c \
        utils.c \
        ft_split.c \
        printf.c \
        printf_utils.c \
-       new_parsing.c \
-       new_parsing_utils.c
+       parsing.c \
+       parsing_utils.c \
+	   window_init.c \
+	   isometric.c \
+	   render_map.c
 
 OBJ := $(SRC:.c=.o)
 
