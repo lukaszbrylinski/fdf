@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:52:10 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/07/01 22:31:27 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/02 15:07:05 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,6 @@ void my_mlx_put_pixel(t_data *img, int x, int y, double color)
 	*(unsigned int *)(img->addr + offset) = color;
 }
 
-// static void	clean_and_write_msg(t_map *map, char *msg)
-// {
-// 		if (msg)
-// 		ft_printf("%s\n", msg);
-// 	if (map)
-// 	{
-// 		free_map(map);
-// 		free(map);
-// 	}
-// 	exit(1);
-// }
 int main(int argc, char **argv)
 {
     t_data data;
@@ -68,10 +57,10 @@ int main(int argc, char **argv)
     }
     init_window(&data);
     render_map(&data, map_data);
+	free_map(map_data);
     mlx_hook(data.win, 2, 1L << 0, handle_keypress, &data);
     mlx_hook(data.win, 17, 1L << 17, exit_clean, &data);
     mlx_loop(data.mlx);
-	free_map(map_data);
     return (0);
 }
 

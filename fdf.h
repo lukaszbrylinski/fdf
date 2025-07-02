@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:47:11 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/07/01 22:28:13 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/02 15:06:02 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdarg.h>
 # include <math.h>
 # include <X11/X.h>
 # include <X11/keysym.h>
