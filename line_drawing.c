@@ -6,20 +6,20 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 20:49:44 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/07/01 21:31:26 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/05 22:59:50 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void draw_line(t_point *a, t_point *b, t_data *img)
+// prawdopodobnie niepotrzebny plik
+void	draw_line(t_point *a, t_point *b, t_data *img)
 {
 	int	dx;
 	int	dy;
 
 	dx = b->x - a->x;
 	dy = b->y - a->y;
-	//my_mlx_pixel_put(img, a->x,a->y, 0xFFFFFF);
 	if (ft_abs(dx) > ft_abs(dy))
 		slope_less_then_one(dx, dy, a, img);
 	else
@@ -34,14 +34,14 @@ int	ft_abs(int val)
 		return (val);
 }
 
-void slope_less_then_one(int dx, int dy, t_point *a, t_data *img)
+void	slope_less_then_one(int dx, int dy, t_point *a, t_data *img)
 {
-	int p;
-	int i;
+	int	p;
+	int	i;
 
 	i = 0;
 	p = 2 * ft_abs(dy) - ft_abs(dx);
-	my_mlx_put_pixel(img, a->x,a->y, 0xFFFFFF);
+	my_mlx_put_pixel(img, a->x, a->y, 0xFFFFFF);
 	while (++i < abs(dx))
 	{
 		if (dx > 0)
@@ -58,18 +58,18 @@ void slope_less_then_one(int dx, int dy, t_point *a, t_data *img)
 				a->y -= 1;
 			p = p + 2 * ft_abs(dy) - 2 * ft_abs(dx);
 		}
-		my_mlx_put_pixel(img, a->x,a->y, 0xFFFFFF);
+		my_mlx_put_pixel(img, a->x, a->y, 0xFFFFFF);
 	}
 }
 
-void slope_bigger_than_one(int dx, int dy, t_point *a, t_data *img)
+void	slope_bigger_than_one(int dx, int dy, t_point *a, t_data *img)
 {
-	int p;
-	int i;
+	int	p;
+	int	i;
 
 	i = 0;
 	p = 2 * dx - dy;
-	my_mlx_put_pixel(img, a->x,a->y, 0xFFFFFF);
+	my_mlx_put_pixel(img, a->x, a->y, 0xFFFFFF);
 	while (++i < ft_abs(dy))
 	{
 		if (dy > 0)
@@ -86,6 +86,6 @@ void slope_bigger_than_one(int dx, int dy, t_point *a, t_data *img)
 				a->x -= 1;
 			p = p + 2 * ft_abs(dx) - 2 * ft_abs(dy);
 		}
-		my_mlx_put_pixel(img, a->x,a->y, 0xFFFFFF);
+		my_mlx_put_pixel(img, a->x, a->y, 0xFFFFFF);
 	}
 }

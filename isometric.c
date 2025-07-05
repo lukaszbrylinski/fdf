@@ -6,20 +6,20 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:01:52 by marvin            #+#    #+#             */
-/*   Updated: 2025/07/01 21:36:54 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/04 14:34:26 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_point project_iso(t_iso_ctx ctx)
+t_point	project_iso(t_iso_ctx ctx)
 {
-    t_point pt;
+	t_point	pt;
 
-    pt.x = (ctx.x - ctx.y) * cos(ISO_ANGLE) * ZOOM + OFFSET_X;
-    pt.y = (ctx.x + ctx.y) * sin(ISO_ANGLE) * ZOOM - ctx.z * 10 + OFFSET_Y;
-
-    return pt;
+	pt.x = (ctx.x - ctx.y) * cos(ISO_ANGLE) * ZOOM + WIN_WIDTH / 2;
+	pt.y = (ctx.x + ctx.y) * sin(ISO_ANGLE) * ZOOM - ctx.z * 10
+		+ WIN_HEIGHT / 4;
+	return (pt);
 }
 
 void	draw_line_colored(t_line_ctx ctx)
@@ -30,13 +30,8 @@ void	draw_line_colored(t_line_ctx ctx)
 
 	init_line_params(&ctx.a, &ctx.b, &p);
 	cur = ctx.a;
-	draw_ctx = (t_draw_ctx){
-		.end = &ctx.b,
-		.params = &p,
-		.img = ctx.img,
-		.color_a = ctx.color_a,
-		.color_b = ctx.color_b
-	};
+	draw_ctx = (t_draw_ctx){.end = &ctx.b, .params = &p, .img = ctx.img,
+		.color_a = ctx.color_a, .color_b = ctx.color_b};
 	draw_line_step(&cur, draw_ctx);
 }
 
@@ -58,6 +53,7 @@ void	init_line_params(t_point *a, t_point *b, t_line_params *p)
 		p->steps = p->dy;
 	p->i = 0;
 }
+
 void	draw_line_step(t_point *cur, t_draw_ctx ctx)
 {
 	t_line_vars	v;
@@ -71,7 +67,7 @@ void	draw_line_step(t_point *cur, t_draw_ctx ctx)
 		v.color = interpolate_color(ctx.color_a, ctx.color_b, v.t);
 		my_mlx_put_pixel(ctx.img, cur->x, cur->y, v.color);
 		if (cur->x == ctx.end->x && cur->y == ctx.end->y)
-			break;
+			break ;
 		v.e2 = 2 * ctx.params->err;
 		if (v.e2 > -ctx.params->dy)
 		{
@@ -87,16 +83,19 @@ void	draw_line_step(t_point *cur, t_draw_ctx ctx)
 	}
 }
 
-unsigned int	interpolate_color(unsigned int color_a, unsigned int color_b, float t)
+unsigned int	interpolate_color(unsigned int color_a, unsigned int color_b,
+		float t)
 {
-	unsigned char	a_r = (color_a >> 16) & 0xFF;
-	unsigned char	a_g = (color_a >> 8) & 0xFF;
-	unsigned char	a_b = color_a & 0xFF;
-	unsigned char	b_r = (color_b >> 16) & 0xFF;
-	unsigned char	b_g = (color_b >> 8) & 0xFF;
-	unsigned char	b_b = color_b & 0xFF;
-	unsigned int	r = (1 - t) * a_r + t * b_r;
-	unsigned int	g = (1 - t) * a_g + t * b_g;
-	unsigned int	b = (1 - t) * a_b + t * b_b;
-	return ((r << 16) | (g << 8) | b);
+	t_inter_col	col;
+
+	col.a_r = (color_a >> 16) & 0xFF;
+	col.a_g = (color_a >> 8) & 0xFF;
+	col.a_b = color_a & 0xFF;
+	col.b_r = (color_b >> 16) & 0xFF;
+	col.b_g = (color_b >> 8) & 0xFF;
+	col.b_b = color_b & 0xFF;
+	col.r = (1 - t) * col.a_r + t * col.b_r;
+	col.g = (1 - t) * col.a_g + t * col.b_g;
+	col.b = (1 - t) * col.a_b + t * col.b_b;
+	return ((col.r << 16) | (col.g << 8) | col.b);
 }

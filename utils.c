@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 17:34:11 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/07/01 22:11:45 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/04 14:03:36 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	ft_atoi(const char *str)
 	}
 	return (min * num);
 }
+
 char	*ft_strdup(char *src)
 {
 	int		len;
@@ -62,34 +63,41 @@ char	*ft_strdup(char *src)
 	return (dest);
 }
 
-void free_map(t_map *map)
+void	free_map(t_map *map)
 {
-    int i;
+	int	i;
 
-    if (!map)
-        return;
-    if (map->map)
-    {
-        for (i = 0; i < map->map_height; i++)
-            free(map->map[i]);
-        free(map->map);
-    }
-    if (map->color_map)
-    {
-        for (i = 0; i < map->map_height; i++)
-            free(map->color_map[i]);
-        free(map->color_map);
-    }
+	i = 0;
+	if (!map)
+		return ;
+	if (map->map)
+	{
+		while (i < map->map_height)
+		{
+			free(map->map[i]);
+			i++;
+		}
+		free(map->map);
+	}
+	i = 0;
+	if (map->color_map)
+	{
+		while (i < map->map_height)
+		{
+			free(map->color_map[i]);
+			i++;
+		}
+		free(map->color_map);
+	}
+	free(map);
 }
 
-void cleanup_and_exit(t_data *data, t_map *map, int exit_code)
+void	cleanup_and_exit(t_data *data, t_map *map, int exit_code)
 {
-    if (data->win)
-        mlx_destroy_window(data->mlx, data->win);
-
-    free_map(map);
-    free(map);
-    free(data);
-    exit(exit_code);
+	if (data->win)
+		mlx_destroy_window(data->mlx, data->win);
+	free_map(map);
+	free(map);
+	free(data);
+	exit(exit_code);
 }
-

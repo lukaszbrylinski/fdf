@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:02:15 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/05/07 16:09:48 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/04 14:04:21 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ char	**ft_split(char const *s, char c)
 
 void	free_split(char **split)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (split[i])
 		free(split[i++]);
 	free(split);

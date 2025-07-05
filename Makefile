@@ -24,9 +24,11 @@ SRC := main.c \
        printf_utils.c \
        parsing.c \
        parsing_utils.c \
+	   parsing_utils2.c \
 	   window_init.c \
 	   isometric.c \
-	   render_map.c
+	   render_map.c \
+	   ft_atoi_base.c
 
 OBJ := $(SRC:.c=.o)
 

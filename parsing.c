@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 14:17:32 by marvin            #+#    #+#             */
-/*   Updated: 2025/07/01 19:50:24 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/06 01:14:32 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,30 +31,60 @@ int	**alloc_2d_array(int rows, int cols)
 	return (arr);
 }
 
-void	fill_color_row(int *color_row, int *map_row, int width)
+// void	fill_color_row(int *color_row, int *map_row, int width)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < width)
+// 	{
+// 		if (map_row[i] == 0)
+// 			color_row[i] = 0xFFFFFF;
+// 		else
+// 			color_row[i] = 0xFF0000;
+// 		i++;
+// 	}
+// }
+
+void	fill_map_with_no_col_val(t_map *map, char *line, int index)
 {
-	int	i;
+	int		i;
+	char	**tokens;
 
 	i = 0;
-	while (i < width)
+	
+	tokens = ft_split(line, ' ');
+	while (i < map->map_width)
 	{
-		if (map_row[i] == 0)
-			color_row[i] = 0xFFFFFF;
+		map->map[index][i] = ft_atoi(tokens[i]);
+		//printf("%d\n", map->map[index][i]);
+		if (map->map[index][i] == 0)
+			map->color_map[index][i] = 0xFFFFFF;
 		else
-			color_row[i] = 0xFF0000;
+			map->color_map[index][i] = 0xFF0000;
 		i++;
 	}
+	free_arr(tokens);
 }
 
-void	fill_maps(t_map *map_data, char **lines)
+void	fill_maps(t_map *map_data, char **lines, int if_color)
 {
 	int	i;
 
 	i = 0;
 	while (lines[i])
 	{
-		fill_row(map_data->map[i], lines[i], map_data->map_width);
-		fill_color_row(map_data->color_map[i], map_data->map[i], map_data->map_width);
+		if (if_color)
+		{
+			fill_map_with_col_val(map_data, lines[i], i);
+		}
+		else
+		{
+			fill_map_with_no_col_val(map_data, lines[i], i);
+		}
+		// fill_row(map_data->map[i], lines[i], map_data->map_width);
+		// fill_color_row(map_data->color_map[i], map_data->map[i],
+		// 	map_data->map_width);
 		i++;
 	}
 }
@@ -104,7 +134,16 @@ t_map	*parse_map(int fd)
 	map_data->map_width = width;
 	map_data->map = alloc_2d_array(height, width);
 	map_data->color_map = alloc_2d_array(height, width);
-	fill_maps(map_data, lines);
-	free_arr(lines);
+	if (!ft_strchr(lines[0], ','))
+	{
+		//printf("no color\n");
+		fill_maps(map_data, lines, 0);
+	}
+	else
+	{
+		//printf("color\n");
+		fill_maps(map_data, lines, 1);
+	}
+		free_arr(lines);
 	return (map_data);
 }
