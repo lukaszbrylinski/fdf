@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 22:48:56 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/07/06 00:16:24 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/06 03:52:22 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,8 @@ int	ft_atoi_base(const char *str, int str_base)
 		i++;
 	if (str[i] == '+' && str[i + 1] != '-')
 		i++;
-	if (str[i] == '-')
-	{
+	if (str[i++] == '-')
 		sign = -1;
-		i++;
-	}
 	while (str[i] && isvalid(str[i], str_base))
 	{
 		res *= str_base;

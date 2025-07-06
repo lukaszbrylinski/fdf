@@ -17,7 +17,6 @@ LIBS := -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
 SRC := main.c \
        gnl.c \
        gnl_utils.c \
-       line_drawing.c \
        utils.c \
        ft_split.c \
        printf.c \

@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:01:52 by marvin            #+#    #+#             */
-/*   Updated: 2025/07/04 14:34:26 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/06 03:43:04 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ t_point	project_iso(t_iso_ctx ctx)
 	t_point	pt;
 
 	pt.x = (ctx.x - ctx.y) * cos(ISO_ANGLE) * ZOOM + WIN_WIDTH / 2;
-	pt.y = (ctx.x + ctx.y) * sin(ISO_ANGLE) * ZOOM - ctx.z * 10
-		+ WIN_HEIGHT / 4;
+	pt.y = (ctx.x + ctx.y) * sin(ISO_ANGLE) * ZOOM - ctx.z * 10 + WIN_HEIGHT
+		/ 4;
 	return (pt);
 }
 

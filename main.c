@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:52:10 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/07/06 01:03:14 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/06 01:41:09 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	my_mlx_put_pixel(t_data *img, int x, int y, double color)
 {
 	int	offset;
 
+	if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
+		return ;
 	offset = (y * img->line_length) + (x * (img->bits_per_pixel / 8));
 	*(unsigned int *)(img->addr + offset) = color;
 }

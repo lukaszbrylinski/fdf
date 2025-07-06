@@ -6,86 +6,69 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 14:17:32 by marvin            #+#    #+#             */
-/*   Updated: 2025/07/06 01:14:32 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/06 03:47:09 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	**alloc_2d_array(int rows, int cols)
+void	fill_color_map(t_map *map, int min)
 {
-	int	**arr;
 	int	i;
+	int	j;
 
 	i = 0;
-	arr = malloc(sizeof(int *) * rows);
-	if (!arr)
-		return (NULL);
-	while (i < rows)
+	while (i < map->map_height)
 	{
-		arr[i] = malloc(sizeof(int) * cols);
-		if (!arr[i])
-			return (NULL);
+		j = 0;
+		while (j < map->map_width)
+		{
+			if (map->map[i][j] == min)
+				map->color_map[i][j] = 0xFFFFFF;
+			else
+				map->color_map[i][j] = 0xFF0000;
+			j++;
+		}
 		i++;
 	}
-	return (arr);
 }
 
-// void	fill_color_row(int *color_row, int *map_row, int width)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < width)
-// 	{
-// 		if (map_row[i] == 0)
-// 			color_row[i] = 0xFFFFFF;
-// 		else
-// 			color_row[i] = 0xFF0000;
-// 		i++;
-// 	}
-// }
-
-void	fill_map_with_no_col_val(t_map *map, char *line, int index)
+void	fill_map_with_no_col_val(t_map *map, char **lines)
 {
 	int		i;
+	int		j;
 	char	**tokens;
+	int		min;
 
 	i = 0;
-	
-	tokens = ft_split(line, ' ');
-	while (i < map->map_width)
+	min = INT_MAX;
+	while (i < map->map_height)
 	{
-		map->map[index][i] = ft_atoi(tokens[i]);
-		//printf("%d\n", map->map[index][i]);
-		if (map->map[index][i] == 0)
-			map->color_map[index][i] = 0xFFFFFF;
-		else
-			map->color_map[index][i] = 0xFF0000;
+		j = 0;
+		tokens = ft_split(lines[i], ' ');
+		while (j < map->map_width)
+		{
+			map->map[i][j] = ft_atoi(tokens[j]);
+			if ((min > map->map[i][j]) || (i == 0 && j == 0))
+				min = map->map[i][j];
+			j++;
+		}
+		free_arr(tokens);
 		i++;
 	}
-	free_arr(tokens);
+	add_min_value_to_map(map, min);
+	fill_color_map(map, min);
 }
 
 void	fill_maps(t_map *map_data, char **lines, int if_color)
 {
-	int	i;
-
-	i = 0;
-	while (lines[i])
+	if (if_color)
 	{
-		if (if_color)
-		{
-			fill_map_with_col_val(map_data, lines[i], i);
-		}
-		else
-		{
-			fill_map_with_no_col_val(map_data, lines[i], i);
-		}
-		// fill_row(map_data->map[i], lines[i], map_data->map_width);
-		// fill_color_row(map_data->color_map[i], map_data->map[i],
-		// 	map_data->map_width);
-		i++;
+		fill_map_with_col_val(map_data, lines);
+	}
+	else
+	{
+		fill_map_with_no_col_val(map_data, lines);
 	}
 }
 
@@ -136,14 +119,12 @@ t_map	*parse_map(int fd)
 	map_data->color_map = alloc_2d_array(height, width);
 	if (!ft_strchr(lines[0], ','))
 	{
-		//printf("no color\n");
 		fill_maps(map_data, lines, 0);
 	}
 	else
 	{
-		//printf("color\n");
 		fill_maps(map_data, lines, 1);
 	}
-		free_arr(lines);
+	free_arr(lines);
 	return (map_data);
 }

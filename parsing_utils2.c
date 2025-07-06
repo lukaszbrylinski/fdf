@@ -5,32 +5,49 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/05 23:22:56 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/07/06 01:17:06 by lbrylins         ###   ########.fr       */
+/*   Created: 2025/07/06 03:45:40 by lbrylins          #+#    #+#             */
+/*   Updated: 2025/07/06 03:46:26 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	fill_map_with_col_val(t_map *map, char *line, int index)
+void	add_min_value_to_map(t_map *map, int min)
 {
-	int		i;
-	char	**tokens;
-	char	**col_token;
+	int	i;
+	int	j;
 
 	i = 0;
-	tokens = ft_split(line, ' ');
-	while (i < map->map_width)
+	if (min < 0)
 	{
-		col_token = ft_split(tokens[i], ',');//10 0xFFFF
-		map->map[index][i] = ft_atoi(col_token[0]);
-		map->color_map[index][i] = ft_atoi_base(col_token[1], 16);
-		ft_printf("%d", map->color_map[index][i]);
-		//printf("i: %d\n %d\n: ", map->map[index][i], map->color_map[index][i]);
-		i++;
-		free(col_token[0]);
-		free(col_token[1]);
-		free(col_token);
+		while (i < map->map_height)
+		{
+			j = 0;
+			while (j < map->map_width)
+			{
+				map->map[i][j] += -min;
+				j++;
+			}
+			i++;
+		}
 	}
-	free_arr(tokens);
+}
+
+int	**alloc_2d_array(int rows, int cols)
+{
+	int	**arr;
+	int	i;
+
+	i = 0;
+	arr = malloc(sizeof(int *) * rows);
+	if (!arr)
+		return (NULL);
+	while (i < rows)
+	{
+		arr[i] = malloc(sizeof(int) * cols);
+		if (!arr[i])
+			return (NULL);
+		i++;
+	}
+	return (arr);
 }

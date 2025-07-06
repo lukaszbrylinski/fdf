@@ -6,7 +6,7 @@
 /*   By: lbrylins <lbrylins@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 17:34:11 by lbrylins          #+#    #+#             */
-/*   Updated: 2025/07/04 14:03:36 by lbrylins         ###   ########.fr       */
+/*   Updated: 2025/07/06 03:32:19 by lbrylins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,12 @@ void	cleanup_and_exit(t_data *data, t_map *map, int exit_code)
 	free(map);
 	free(data);
 	exit(exit_code);
+}
+
+int	ft_abs(int val)
+{
+	if (val < 0)
+		return (-val);
+	else
+		return (val);
 }
